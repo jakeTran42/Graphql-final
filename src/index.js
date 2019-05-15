@@ -1,5 +1,6 @@
 const { GraphQLServer } = require('graphql-yoga')
-// const Query = require('./resolvers/Query')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
 
 let ports = [
     {
@@ -18,75 +19,12 @@ let ports = [
 
 let idCount = ports.length
 
-// 2
+// resolvers for manipulating data
 const resolvers = {
-  Query : {
-    about: (parent, args) => {
-        return {
-            name: args.name,
-            course: args.course,
-            description: args.description
-        }
-    },
-    
-    portfolios: () => {
-        return ports
-    },
-    
-    portfolio: (parent, { id }) => {
-    
-        const data = ports.filter((file) => {
-    
-            if (file.id == id) {
-                return file
-            }
-        })
-        return data[0]
-    }
-  },
-
-  Mutation: {
-    post: (parent, args) => {
-        const port = {
-            id: idCount++,
-            title: args.title,
-            description: args.description,
-            url: args.url,
-        }
-        ports.push(port)
-        return port
-    },
-
-    edit: (parent, args) => {
-        const data = ports.filter((file) => {
-            if (args.id == file.id) {
-                if (args.title) {
-                    file.title = args.title
-                }
-                
-                if (args.description) {
-                    file.description = args.description
-                }
-        
-                if (args.url) {
-                    file.url = args.url
-                }
-            }
-        })
-        return data[0]
-    },
-
-    delete: (parent, {id}) => {
-        var index  = ports.map((file, index) => {
-            if (file.id == id) {
-                return index
-            }
-        })
-        ports = ports.splice(index-1, 1)
-        return ports
-    }
-  },
-
+    //Query for reading/fetching data
+    Query,
+    //Mutation for writing data
+    Mutation
 }
 
 // 3
